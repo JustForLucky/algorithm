@@ -5,32 +5,32 @@
 * 1 中缀表达式转为后缀表达式（逆波兰表达式）
 * 2 后缀表达式求值
 * */
-const operator = {
-	'+': (num1, num2) => num1 + num2,
-	'-': (num1, num2) => num1 - num2,
-	'*': (num1, num2) => num1 * num2,
-	'/': (num1, num2) => num1/num2
+var operator = {
+	'+': function (num1, num2) { return num1 + num2 },
+	'-': function (num1, num2) { return num1 - num2 },
+	'*': function (num1, num2) { return num1 * num2 },
+	'/': function (num1, num2) { return num1/num2}
 }
-const operator_weight = {
+var operator_weight = {
 	'+': 1,
 	'-': 1,
 	'*': 10,
-	'/': 10,
+	'/': 10
 }
 function infix_to_postfix(infix_expression) {
-	let postfix_expression = [];
-	let stack = [];
-	let operator_target = '';
-	for(let i=0,l=infix_expression.length; i<l; i++) {
-		const cur = infix_expression[i];
-		let top_cur;
+	var postfix_expression = [];
+	var stack = [];
+	var operator_target = '';
+	for(var i=0,l=infix_expression.length; i<l; i++) {
+		var cur = infix_expression[i];
+		var top_cur;
 		// 运算符
-		const cur_weight = operator_weight[cur];
+		var cur_weight = operator_weight[cur];
 		if (cur_weight) {
 			operator_target && postfix_expression.push(operator_target);
 			operator_target = '';
 			top_cur = stack[0];
-			let top_cur_weight = operator_weight[top_cur];
+			var top_cur_weight = operator_weight[top_cur];
 			while(top_cur && top_cur !== '(' && (top_cur_weight > cur_weight)) {
 				postfix_expression.push(stack.shift());
 				top_cur = stack[0];
@@ -63,20 +63,20 @@ function infix_to_postfix(infix_expression) {
 			postfix_expression.push(operator_target);
 		}
 	}
-	postfix_expression.push(...stack);
+	postfix_expression.push.apply(postfix_expression, stack);
 	return postfix_expression;
 }
 function postfix_expression_evaluation(postfix_expression) {
-	const stack = [];
-	for(let i=0,l=postfix_expression.length; i<l; i++) {
-		const cur = postfix_expression[i];
-		const cur_operator = operator[cur];
+	var stack = [];
+	for(var i=0,l=postfix_expression.length; i<l; i++) {
+		var cur = postfix_expression[i];
+		var cur_operator = operator[cur];
 		if (cur_operator) {
 			if (stack.length < 2) {
 				return NaN;
 			}
-			const num2 = stack.shift();
-			const num1 = stack.shift();
+			var num2 = stack.shift();
+			var num1 = stack.shift();
 			stack.unshift(cur_operator(num1, num2));
 			continue;
 		}
